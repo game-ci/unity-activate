@@ -19,7 +19,7 @@ collection too.
 Create or edit the file called `.github/workflows/activation.yml` and add a job to it.
  
 ```yaml
-name: Acquire activation file
+name: Activate Unity
 on: [push]
 jobs:
   requestActivation:
