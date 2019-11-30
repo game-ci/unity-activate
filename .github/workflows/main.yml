@@ -1,0 +1,17 @@
+name: Actions 😎
+on: [push]
+
+jobs:
+  requestActivation:
+    name: Request activation ✔
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository (required to test local actions)
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      # Activate Unity
+      - name: Activate Unity
+        uses: ./
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
