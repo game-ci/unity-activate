@@ -1,0 +1,11 @@
+name: 'Unity - Activate'
+author: Webber Takken <webber@takken.io>
+description: 'Activate Unity using credentials or a license file. Both personal and professional licenses are supported.'
+inputs: {}
+outputs: {}
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'box'
+  color: 'gray-dark'
