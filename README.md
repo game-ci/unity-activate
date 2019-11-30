@@ -16,6 +16,20 @@ collection too.
 
 ## Usage
 
+Create or edit the file called `.github/workflows/activation.yml` and add a job to it.
+ 
+```yaml
+name: Acquire activation file
+on: [push]
+jobs:
+  requestActivation:
+    name: Request activation ✔
+    runs-on: ubuntu-latest
+    steps:
+```
+
+Continue to either the personal license or professional license section below.
+
 #### Personal license
 
 1. Follow the **activation** section from [request action](https://github.com/marketplace/actions/unity-request-activation-file) to set `UNITY_LICENSE` variable.
