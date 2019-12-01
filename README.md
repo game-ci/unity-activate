@@ -1,5 +1,5 @@
 # Unity - Activate
-[![Actions status](https://github.com/WebberTakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg)](https://github.com/WebberTakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg)
+[![Actions status](https://github.com/webbertakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg)](https://github.com/webbertakken/unity-activate/actions?query=branch%3Amaster+workflow%3A"Actions+😎")
 
 [Github Action](https://github.com/features/actions)
 to activate Unity using credentials or a license file. Both **personal** and 
