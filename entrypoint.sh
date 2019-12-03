@@ -75,8 +75,6 @@ else
   #
   # Note: This is the preferred way for PROFESSIONAL LICENSES.
   #
-  # TODO - Verify this using some pro license
-  #
   xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
     /opt/Unity/Editor/Unity \
       -batchmode \
