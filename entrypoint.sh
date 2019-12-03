@@ -69,6 +69,18 @@ if [[ -n "$UNITY_LICENSE" ]]; then
 
 else
   #
+  # TODO - Remove any debugging below
+  #
+
+  # Figure out which files were added
+  printf "\n\n./(entry folder)\n\n"
+  ls -alh
+  printf "\n\n/root/.local/share/unity3d\n\n"
+  ls -Ralph /root/.local/share/unity3d
+  printf "\n\n/opt/Unity/Editor/\n\n"
+  ls -alh /opt/Unity/Editor/
+
+  #
   # PROFESSIONAL (SERIAL) LICENSE MODE
   #
   # This will activate unity, using the activating process.
@@ -85,4 +97,21 @@ else
       -username "$UNITY_EMAIL" \
       -password "$UNITY_PASSWORD"
 
+  #
+  # Export the activation instance
+  #
+  # TODO - Remove any debugging below
+  #
+
+  # Figure out which files were added
+  printf "\n\n./(entry folder)\n\n"
+  ls -alh
+  printf "\n\n/root/.local/share/unity3d\n\n"
+  ls -Ralph /root/.local/share/unity3d
+  printf "\n\n/opt/Unity/Editor/\n\n"
+  ls -alh /opt/Unity/Editor/
+
+  # Set resulting file as output
+  #  RECEIVED_ACTIVATION="$(<figureOutWhichFileWeNeed)"
+  #  echo "::set-env name=ACTIVATION_INSTANCE::$RECEIVED_ACTIVATION"
 fi
