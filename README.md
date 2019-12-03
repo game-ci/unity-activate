@@ -1,17 +1,21 @@
 # Unity - Activate
 [![Actions status](https://github.com/webbertakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg)](https://github.com/webbertakken/unity-activate/actions?query=branch%3Amaster+workflow%3A"Actions+😎")
 
-[Github Action](https://github.com/features/actions)
-to activate Unity using credentials or a license file. Both **personal** and 
-**professional** licenses are supported.
+---
 
-Use this action to verify whether your license file is correctly configured. If 
-so, you will be able to run the 
+GitHub Action to [activate Unity](https://github.com/marketplace/actions/unity-activate). 
+
+Part of the [Unity Actions](https://github.com/webbertakken/unity-actions) collection.
+
+---
+
+Use this action to activate Unity using credentials or a license file. Both 
+**personal** and **professional** licenses are supported.
+
+When successfully activated, you will be able to run the 
 [Test](https://github.com/webbertakken/unity-actions#test) and
 [Build](https://github.com/webbertakken/unity-actions#build)
-actions from the 
-[Unity Actions](https://github.com/webbertakken/unity-actions) 
-collection too.
+actions.
 
 ### Documentation
 
@@ -65,13 +69,14 @@ Continue to either the personal license or professional license section below.
     UNITY_SERIAL:   ${{ secrets.UNITY_SERIAL }}
 ```
 
-_**Note:** I was not able to verify these steps as i don't have a pro license. Feel free 
-to give 
-[feedback](https://github.com/webbertakken/unity-activate/issues/new) or 
-[contribute](https://github.com/webbertakken/unity-activate)._
-
 ## More actions
 
 Visit 
 [Unity Actions](https://github.com/webbertakken/unity-actions) 
 to find related actions for Unity.
+
+Feel free to contribute.
+
+## Licence 
+
+[MIT](./LICENSE)
