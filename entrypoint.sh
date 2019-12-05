@@ -9,21 +9,13 @@ if [[ -n "$UNITY_LICENSE" ]]; then
   # Note that this is the ONLY WAY for PERSONAL LICENSES in 2019.
   #   * See for more details: https://gitlab.com/gableroux/unity3d-gitlab-ci-example/issues/5#note_72815478
   #
-  # The license file can be acquired in two possible ways:
-  #   * Utilize `webbertakken/unity-actions/request-manual-activation-file`
-  #   * Copy from your local machine (may be unstable due to different server specs)
-  #       - Windows:   C:/ProgramData/Unity/Unity_lic.ulf
-  #       - MacOS:     /Library/Application Support/Unity/Unity_lic.ulf
-  #       - Linux:     -
-  #
-  # CLI arguments reference: https://docs.unity3d.com/Manual/CommandLineArguments.html
+  # The license file can be acquired using `webbertakken/request-manual-activation-file` action.
 
   # Set the license file path
   FILE_PATH=UnityLicenseFile.ulf
 
   # Copy license file from Github variables
   echo "$UNITY_LICENSE" | tr -d '\r' > $FILE_PATH
-  echo "$UNITY_LICENSE" | tr -d '\r' > /root/.local/share/unity3d/Unity/Unity_lic.ulf
 
   ##
   ## Activate license
@@ -58,28 +50,19 @@ if [[ -n "$UNITY_LICENSE" ]]; then
 
   # Display information about the result
   if [ $UNITY_EXIT_CODE -eq 0 ]; then
-    echo "Activation complete"
+    echo "Activation (personal) complete."
   else
-    echo "Unclassified error occured while trying to activate license"
+    echo "Unclassified error occured while trying to activate (personal) license."
     echo "Exit code was: $UNITY_EXIT_CODE"
   fi
+
+  # Remove license file
+  rm -f $FILE_PATH
 
   # Exit with the code from the license verification step
   exit $UNITY_EXIT_CODE
 
 else
-  #
-  # TODO - Remove any debugging below
-  #
-
-  # Figure out which files were added
-  printf "\n\n./(entry folder)\n\n"
-  ls -alh
-  printf "\n\n/root/.local/share/unity3d\n\n"
-  ls -Ralph /root/.local/share/unity3d
-  printf "\n\n/opt/Unity/Editor/\n\n"
-  ls -alh /opt/Unity/Editor/
-
   #
   # PROFESSIONAL (SERIAL) LICENSE MODE
   #
@@ -97,21 +80,18 @@ else
       -username "$UNITY_EMAIL" \
       -password "$UNITY_PASSWORD"
 
-  #
-  # Export the activation instance
-  #
-  # TODO - Remove any debugging below
-  #
+  # Store the exit code from the verify command
+  UNITY_EXIT_CODE=$?
 
-  # Figure out which files were added
-  printf "\n\n./(entry folder)\n\n"
-  ls -alh
-  printf "\n\n/root/.local/share/unity3d\n\n"
-  ls -Ralph /root/.local/share/unity3d
-  printf "\n\n/opt/Unity/Editor/\n\n"
-  ls -alh /opt/Unity/Editor/
+  # Display information about the result
+  if [ $UNITY_EXIT_CODE -eq 0 ]; then
+    echo "Activation (professional) complete."
+  else
+    echo "Unclassified error occured while trying to activate (professional) license."
+    echo "Exit code was: $UNITY_EXIT_CODE"
+  fi
 
-  # Set resulting file as output
-  #  RECEIVED_ACTIVATION="$(<figureOutWhichFileWeNeed)"
-  #  echo "::set-env name=ACTIVATION_INSTANCE::$RECEIVED_ACTIVATION"
+  # Exit with the code from the license verification step
+  exit $UNITY_EXIT_CODE
+
 fi
