@@ -46,7 +46,7 @@ Continue to either the personal license or professional license section below.
 
 ```yaml
 - name: Activate Unity
-  uses: webbertakken/unity-activate@v1
+  uses: webbertakken/unity-activate@v1.1
   env:
     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 ```
@@ -62,7 +62,7 @@ Continue to either the personal license or professional license section below.
 
 ```yaml
 - name: Activate Unity
-  uses: webbertakken/unity-activate@v1
+  uses: webbertakken/unity-activate@v1.1
   env:
     UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
