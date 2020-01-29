@@ -22,12 +22,13 @@ jobs:
       - run: yarn build --quiet && git diff --quiet action || { echo "action should be auto generated" ; exit 62; }
 
   requestActivation:
-    name: Request activation ✔
+    name: Activate ${{ matrix.unityVersion }} ✔
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         unityVersion:
+          # Note: Major version differences may require different activation files.
           - 2018.4.15f1
           - 2019.2.11f1
           - 2019.2.14f1
