@@ -11,11 +11,11 @@ tab_width = 2
 trim_trailing_whitespace = true
 
 [*.md]
-max_line_length = 0
+max_line_length = off
 trim_trailing_whitespace = false
 
-[*.yml]
-max_line_length = 0
+[*.{yml,yaml}]
+max_line_length = off
 
 [COMMIT_EDITMSG]
-max_line_length = 0
+max_line_length = off
