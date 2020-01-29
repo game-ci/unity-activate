@@ -1,11 +1,15 @@
 name: 'Unity - Activate'
 author: Webber Takken <webber@takken.io>
 description: 'Activate Unity using credentials or a license file. Both personal and professional licenses are supported.'
-inputs: {}
+inputs:
+  unityVersion:
+    required: false
+    default: '2019.2.11f1'
+    description: 'Version of unity to use for building the project.'
 outputs: {}
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
 branding:
   icon: 'box'
   color: 'gray-dark'
+runs:
+  using: 'node12'
+  main: 'action/index.js'

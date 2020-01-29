@@ -12,10 +12,10 @@ Part of the [Unity Actions](https://github.com/webbertakken/unity-actions) colle
 Use this action to activate Unity using credentials or a license file. Both 
 **personal** and **professional** licenses are supported.
 
-When successfully activated, you will be able to run the 
+Note that the latest versions of 
 [Test](https://github.com/webbertakken/unity-actions#test) and
 [Build](https://github.com/webbertakken/unity-actions#build)
-actions.
+contain standalone activation and no longer require this action.
 
 ### Documentation
 
@@ -25,7 +25,7 @@ collection repository for workflow documentation and reference implementation.
 
 ## Usage
 
-Create or edit the file called `.github/workflows/activation.yml` and add a job to it.
+Create or edit the file called `.github/workflows/main.yml` and add a job to it.
  
 ```yaml
 name: Activate Unity
@@ -68,6 +68,8 @@ Continue to either the personal license or professional license section below.
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     UNITY_SERIAL:   ${{ secrets.UNITY_SERIAL }}
 ```
+
+Commit and push your workflow definition.
 
 ## More actions
 
