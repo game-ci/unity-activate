@@ -1,4 +1,5 @@
-FROM gableroux/unity3d:2019.2.11f1
+ARG IMAGE
+FROM $IMAGE
 
 LABEL "com.github.actions.name"="Unity - Activate"
 LABEL "com.github.actions.description"="Activate Unity using credentials or a license file. Both personal and professional licenses are supported."
