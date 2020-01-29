@@ -23,6 +23,10 @@ class Docker {
     const command = `docker run \
         --workdir /github/workspace \
         --rm \
+        --env UNITY_LICENSE \
+        --env UNITY_EMAIL \
+        --env UNITY_PASSWORD \
+        --env UNITY_SERIAL \
         --env UNITY_VERSION=${unityVersion} \
         --env HOME=/github/home \
         --env GITHUB_REF \
