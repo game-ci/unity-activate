@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+#
+# Display the unity version
+#
+
+echo "Activating Unity version \"$UNITY_VERSION\"."
+
 if [[ -n "$UNITY_LICENSE" ]]; then
   #
   # PERSONAL LICENSE MODE
