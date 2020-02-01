@@ -1,6 +1,6 @@
 # Unity - Activate
 
-[![Actions status](https://github.com/webbertakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg)](https://github.com/webbertakken/unity-activate/actions?query=branch%3Amaster+workflow%3A"Actions+😎")
+[![Actions status](https://github.com/webbertakken/unity-activate/workflows/Actions%20%F0%9F%98%8E/badge.svg?event=push&branch=master)](https://github.com/webbertakken/unity-activate/actions?query=branch%3Amaster+event%3Apush+workflow%3A"Actions%20%F0%9F%98%8E")
 
 ---
 
