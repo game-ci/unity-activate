@@ -40,7 +40,7 @@ and engage with the community.
 
 To help out sharpen the documentation, please find the docs [repository](https://github.com/Unity-CI/Website).
 
-To contribute to Unity Builder, kindly read the [contribution guide](./CONTRIBUTING.md).
+To contribute to this project, kindly read the [contribution guide](./CONTRIBUTING.md).
 
 ## Licence
 
