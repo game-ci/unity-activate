@@ -25,13 +25,12 @@ if [[ -n "$UNITY_LICENSE" ]]; then
   echo "$UNITY_LICENSE" | tr -d '\r' > $FILE_PATH
 
   # Activate license
-  ACTIVATION_OUTPUT=$(xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-    /opt/Unity/Editor/Unity \
-      -batchmode \
-      -nographics \
-      -logFile /dev/stdout \
-      -quit \
-      -manualLicenseFile $FILE_PATH)
+  ACTIVATION_OUTPUT=$(unity-editor \
+    -batchmode \
+    -nographics \
+    -logFile /dev/stdout \
+    -quit \
+    -manualLicenseFile $FILE_PATH)
 
   # Store the exit code from the verify command
   UNITY_EXIT_CODE=$?
@@ -64,15 +63,14 @@ elif [[ -n "$UNITY_SERIAL" && -n "$UNITY_EMAIL" && -n "$UNITY_PASSWORD" ]]; then
   echo "Requesting activation (professional license)"
 
   # Activate license
-  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-    /opt/Unity/Editor/Unity \
-      -batchmode \
-      -nographics \
-      -logFile /dev/stdout \
-      -quit \
-      -serial "$UNITY_SERIAL" \
-      -username "$UNITY_EMAIL" \
-      -password "$UNITY_PASSWORD"
+  unity-editor \
+    -batchmode \
+    -nographics \
+    -logFile /dev/stdout \
+    -quit \
+    -serial "$UNITY_SERIAL" \
+    -username "$UNITY_EMAIL" \
+    -password "$UNITY_PASSWORD"
 
   # Store the exit code from the verify command
   UNITY_EXIT_CODE=$?
