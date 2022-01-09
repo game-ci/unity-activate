@@ -13,7 +13,7 @@ class Action {
     return path.basename(__dirname) === 'model';
   }
 
-  static get name() {
+  static get canonicalName() {
     return 'unity-activate';
   }
 
@@ -26,7 +26,7 @@ class Action {
   }
 
   static get actionFolder() {
-    return `${Action.rootFolder}/action`;
+    return `${Action.rootFolder}/dist`;
   }
 
   static get dockerfile() {

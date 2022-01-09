@@ -6,13 +6,13 @@ class Docker {
     const { path, dockerfile, baseImage } = buildParameters;
     const { version } = baseImage;
 
-    const tag = ImageTag.createForAction(version);
+    const tag = new ImageTag(version);
     const command = `docker build ${path} \
       --file ${dockerfile} \
       --build-arg IMAGE=${baseImage} \
       --tag ${tag}`;
 
-    await exec(command, null, { silent });
+    await exec(command, undefined, { silent });
 
     return tag;
   }
@@ -50,7 +50,7 @@ class Docker {
         --volume "${workspace}":"/github/workspace" \
         ${image}`;
 
-    await exec(command, null, { silent });
+    await exec(command, undefined, { silent });
   }
 }
 

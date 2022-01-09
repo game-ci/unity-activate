@@ -1,13 +1,12 @@
+import * as core from '@actions/core';
 import { Action, Docker, Input, ImageTag } from './model';
-
-const core = require('@actions/core');
 
 async function action() {
   Action.checkCompatibility();
 
   const { dockerfile, workspace, actionFolder } = Action;
-  const { unityVersion } = Input.getFromUser();
-  const baseImage = ImageTag.createForBase(unityVersion);
+  const unityVersion = Input.unityVersion;
+  const baseImage = new ImageTag(unityVersion);
 
   // Build docker image
   const actionImage = await Docker.build({ path: actionFolder, dockerfile, baseImage });

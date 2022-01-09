@@ -2,6 +2,6 @@ import * as Index from '.';
 
 describe('Index', () => {
   test.each(['Action', 'Docker', 'ImageTag', 'Input'])('exports %s', exportedModule => {
-    expect(typeof Index[exportedModule]).toStrictEqual('function');
+    expect(Index[exportedModule]).toBeDefined();
   });
 });
