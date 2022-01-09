@@ -14,6 +14,9 @@
   "rules": {
     "prettier/prettier": "error",
     "import/no-extraneous-dependencies": 0,
-    "import/no-namespace": "off"
+    "import/no-namespace": "off",
+    "filenames/match-regex": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-module": "off"
   }
 }

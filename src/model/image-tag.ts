@@ -9,12 +9,14 @@ class ImageTag {
   public customImage: any;
 
   constructor(unityVersion: string) {
-
     if (!ImageTag.versionPattern.test(unityVersion)) {
       throw new Error(`Invalid version "${unityVersion}".`);
     }
 
-    const builderPlatform = ImageTag.getTargetPlatformToImageSuffixMap(Platform.types.StandaloneLinux64, unityVersion);
+    const builderPlatform = ImageTag.getTargetPlatformToImageSuffixMap(
+      Platform.types.StandaloneLinux64,
+      unityVersion,
+    );
 
     this.repository = 'unityci';
     this.name = 'editor';
@@ -43,7 +45,8 @@ class ImageTag {
   }
 
   static getTargetPlatformToImageSuffixMap(platform, version) {
-    const { generic, webgl, mac, windows, linux, linuxIl2cpp, android, ios, facebook } = ImageTag.imageSuffixes;
+    const { generic, webgl, mac, windows, linux, linuxIl2cpp, android, ios, facebook } =
+      ImageTag.imageSuffixes;
 
     const [major, minor] = version.split('.').map((digit) => Number(digit));
     // @see: https://docs.unity3d.com/ScriptReference/BuildTarget.html

@@ -10,7 +10,7 @@ describe('Docker', () => {
     const tag = await Docker.build({ path, dockerfile, baseImage }, true);
     expect(tag).toBeInstanceOf(ImageTag);
     expect(tag.toString()).toStrictEqual('unity-builder:3');
-  }, 240000);
+  }, 240_000);
   it.skip('runs', async () => {
     const image = 'unity-builder:2019.2.11f1-webgl';
     const parameters = {

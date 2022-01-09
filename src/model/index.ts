@@ -1,6 +1,5 @@
-import Action from './action';
-import Docker from './docker';
-import Input from './input';
-import ImageTag from './image-tag';
+export { default as Action } from './action';
+export { default as Input } from './input';
+export { default as Docker } from './docker';
 
-export { Action, Docker, Input, ImageTag };
+export { default as ImageTag } from './image-tag';

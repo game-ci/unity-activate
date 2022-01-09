@@ -1,9 +1,9 @@
-class Platform {
-  static get default() {
+const Platform = {
+  get default() {
     return Platform.types.StandaloneWindows64;
-  }
+  },
 
-  static get types() {
+  get types() {
     return {
       StandaloneOSX: 'StandaloneOSX',
       StandaloneWindows: 'StandaloneWindows',
@@ -26,9 +26,9 @@ class Platform {
       // Test specific
       Test: 'Test',
     };
-  }
+  },
 
-  static isWindows(platform) {
+  isWindows(platform) {
     switch (platform) {
       case Platform.types.StandaloneWindows:
       case Platform.types.StandaloneWindows64:
@@ -36,16 +36,16 @@ class Platform {
       default:
         return false;
     }
-  }
+  },
 
-  static isAndroid(platform) {
+  isAndroid(platform) {
     switch (platform) {
       case Platform.types.Android:
         return true;
       default:
         return false;
     }
-  }
-}
+  },
+};
 
 export default Platform;

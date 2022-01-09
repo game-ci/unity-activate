@@ -1,8 +1,8 @@
-import { exec } from '@actions/exec';
 import ImageTag from './image-tag';
+import { exec } from '@actions/exec';
 
-class Docker {
-  static async build(buildParameters, silent = false) {
+const Docker = {
+  async build(buildParameters, silent = false) {
     const { path, dockerfile, baseImage } = buildParameters;
     const { version } = baseImage;
 
@@ -15,9 +15,9 @@ class Docker {
     await exec(command, undefined, { silent });
 
     return tag;
-  }
+  },
 
-  static async run(image, parameters, silent = false) {
+  async run(image, parameters, silent = false) {
     const { unityVersion, workspace } = parameters;
 
     const command = `docker run \
@@ -51,7 +51,7 @@ class Docker {
         ${image}`;
 
     await exec(command, undefined, { silent });
-  }
-}
+  },
+};
 
 export default Docker;
