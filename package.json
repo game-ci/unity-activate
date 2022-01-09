@@ -2,7 +2,7 @@
   "name": "unity-activate",
   "version": "2.0.0",
   "description": "Activate Unity using credentials or a license file. Both personal and professional licenses are supported.",
-  "main": "action/index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:game-ci/unity-activate.git",
   "author": "Webber <webber@takken.io>",
   "license": "MIT",
