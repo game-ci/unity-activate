@@ -4,4 +4,3 @@
 npx lint-staged
 yarn test
 yarn build
-git add dist/index.*
