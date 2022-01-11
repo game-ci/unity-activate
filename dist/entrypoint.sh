@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
 #
-# Display the unity version
+# Create directory for license activation
 #
+ACTIVATE_LICENSE_PATH="$GITHUB_WORKSPACE/_activate-license"
+mkdir -p "$ACTIVATE_LICENSE_PATH"
 
-echo "Activating Unity version \"$UNITY_VERSION\"."
+# Run in ACTIVATE_LICENSE_PATH directory
+echo "Changing to \"$ACTIVATE_LICENSE_PATH\" directory."
+pushd "$ACTIVATE_LICENSE_PATH"
 
-if [[ -n "$UNITY_LICENSE" ]]; then
+if [[ -n "$UNITY_LICENSE" ]] || [[ -n "$UNITY_LICENSE_FILE" ]]; then
   #
   # PERSONAL LICENSE MODE
   #
@@ -21,14 +25,16 @@ if [[ -n "$UNITY_LICENSE" ]]; then
   # Set the license file path
   FILE_PATH=UnityLicenseFile.ulf
 
-  # Copy license file from Github variables
-  echo "$UNITY_LICENSE" | tr -d '\r' > $FILE_PATH
+  if [[ -n "$UNITY_LICENSE" ]]; then
+    # Copy license file from Github variables
+    echo "$UNITY_LICENSE" | tr -d '\r' > $FILE_PATH
+  elif [[ -n "$UNITY_LICENSE_FILE" ]]; then
+    # Copy license file from file system
+    cat "$UNITY_LICENSE_FILE" | tr -d '\r' > $FILE_PATH
+  fi
 
   # Activate license
-  ACTIVATION_OUTPUT=$(xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-    /opt/Unity/Editor/Unity \
-      -batchmode \
-      -nographics \
+  ACTIVATION_OUTPUT=$(unity-editor \
       -logFile /dev/stdout \
       -quit \
       -manualLicenseFile $FILE_PATH)
@@ -64,15 +70,12 @@ elif [[ -n "$UNITY_SERIAL" && -n "$UNITY_EMAIL" && -n "$UNITY_PASSWORD" ]]; then
   echo "Requesting activation (professional license)"
 
   # Activate license
-  xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' \
-    /opt/Unity/Editor/Unity \
-      -batchmode \
-      -nographics \
-      -logFile /dev/stdout \
-      -quit \
-      -serial "$UNITY_SERIAL" \
-      -username "$UNITY_EMAIL" \
-      -password "$UNITY_PASSWORD"
+  unity-editor \
+    -logFile /dev/stdout \
+    -quit \
+    -serial "$UNITY_SERIAL" \
+    -username "$UNITY_EMAIL" \
+    -password "$UNITY_PASSWORD"
 
   # Store the exit code from the verify command
   UNITY_EXIT_CODE=$?
@@ -85,7 +88,7 @@ else
   #
   echo "License activation strategy could not be determined."
   echo ""
-  echo "Visit https://github.com/webbertakken/unity-builder#usage for more"
+  echo "Visit https://game.ci/docs/github/getting-started for more"
   echo "details on how to set up one of the possible activation strategies."
 
   # Immediately exit as no UNITY_EXIT_CODE can be derrived.
@@ -98,13 +101,9 @@ fi
 #
 if [ $UNITY_EXIT_CODE -eq 0 ]; then
   # Activation was a success
-  echo ""
-  echo "###########################"
-  echo "#   Activation complete   #"
-  echo "###########################"
-  echo ""
+  echo "Activation complete."
 else
-  echo ""
+  # Activation failed so exit with the code from the license verification step
   echo "###########################"
   echo "#         Failure         #"
   echo "###########################"
@@ -114,5 +113,9 @@ else
   echo ""
   echo "To find the reason for failure: please search for errors in the log above."
   echo ""
+  echo "Exit code was: $UNITY_EXIT_CODE"
   exit $UNITY_EXIT_CODE
 fi
+
+# Return to previous working directory
+popd
