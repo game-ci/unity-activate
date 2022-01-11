@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+#
+# Create directory for license activation
+#
+ACTIVATE_LICENSE_PATH="$GITHUB_WORKSPACE/_activate-license"
+mkdir -p "$ACTIVATE_LICENSE_PATH"
+
 # Run in ACTIVATE_LICENSE_PATH directory
 echo "Changing to \"$ACTIVATE_LICENSE_PATH\" directory."
 pushd "$ACTIVATE_LICENSE_PATH"
@@ -98,7 +104,15 @@ if [ $UNITY_EXIT_CODE -eq 0 ]; then
   echo "Activation complete."
 else
   # Activation failed so exit with the code from the license verification step
-  echo "Unclassified error occured while trying to activate license."
+  echo "###########################"
+  echo "#         Failure         #"
+  echo "###########################"
+  echo ""
+  echo "Please note that the exit code is not very descriptive."
+  echo "Most likely it will not help you solve the issue."
+  echo ""
+  echo "To find the reason for failure: please search for errors in the log above."
+  echo ""
   echo "Exit code was: $UNITY_EXIT_CODE"
   exit $UNITY_EXIT_CODE
 fi
