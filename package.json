@@ -34,7 +34,7 @@
     "husky": "4.2.3",
     "jest": "25.1.0",
     "lint-staged": "10.0.8",
-    "lodash-es": "4.17.15",
+    "lodash-es": "4.17.21",
     "prettier": "1.19.1"
   },
   "husky": {
