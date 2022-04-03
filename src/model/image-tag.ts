@@ -103,7 +103,7 @@ class ImageTag {
   }
 
   get tag() {
-    return `${this.version}-${this.builderPlatform}`.replace(/-+$/, '');
+    return `ubuntu-${this.version}-${this.builderPlatform}`.replace(/-+$/, '');
   }
 
   get image() {
@@ -117,7 +117,7 @@ class ImageTag {
       return customImage;
     }
 
-    const dockerRepoVersion = 0;
+    const dockerRepoVersion = 1;
     return `${image}:${tag}-${dockerRepoVersion}`;
   }
 }
