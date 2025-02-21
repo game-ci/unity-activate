@@ -17,8 +17,8 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
-    "@actions/github": "^2.2.0",
-    "@octokit/core": "^3.5.1"
+    "@actions/github": "^3.0.0",
+    "@octokit/core": "^6.1.4"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
