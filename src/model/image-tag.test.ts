@@ -8,8 +8,12 @@ describe('ImageTag', () => {
       expect(() => new ImageTag(unityVersion)).not.toThrow();
     });
 
-    test.each(['2000.0.0f0', '2011.1.11f1'])('accepts %p version format', (version) => {
+    test.each(['2000.0.0f0', '2011.1.11f1', '6000.0.0f0'])('accepts %p version format', (version) => {
       expect(() => new ImageTag(version)).not.toThrow();
+    });
+
+    test.each(['1999.1.1f1', '6000.1.invalid'])('rejects %p version format', (version) => {
+      expect(() => new ImageTag(version)).toThrow(`Invalid version "${version}".`);
     });
   });
   describe('toString', () => {
