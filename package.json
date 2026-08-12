@@ -31,8 +31,8 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/exec": "^1.0.4",
     "@actions/github": "^6",
+    "@game-ci/unity-engine-core": "game-ci/unity-engine-core#main",
     "@octokit/core": "^6"
   },
   "devDependencies": {

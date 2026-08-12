@@ -1,22 +1,5 @@
-import * as core from '@actions/core';
-import { Action, Docker, ImageTag, Input } from './model';
-
-async function run() {
-  try {
-    Action.checkCompatibility();
-
-    const { dockerfile, workspace, actionFolder } = Action;
-    const unityVersion = Input.unityVersion;
-    const baseImage = new ImageTag(unityVersion);
-
-    // Build docker image
-    const actionImage = await Docker.build({ path: actionFolder, dockerfile, baseImage });
-
-    // Run docker image
-    await Docker.run(actionImage, { workspace, unityVersion });
-  } catch (error: any) {
-    core.setFailed(error.message);
-  }
-}
+// Thin wrapper: the actual activation logic lives in game-ci/unity-engine-core.
+// See game-ci/roadmap#11 (workstream 2) for the "thin wrapper" migration this is part of.
+import { run } from '@game-ci/unity-engine-core/dist/unity-activate';
 
 run();
