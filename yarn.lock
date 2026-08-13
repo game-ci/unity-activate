@@ -5,7 +5,7 @@ __metadata:
   version: 9
   cacheKey: 10
 
-"@actions/core@npm:^1.2.6":
+"@actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6":
   version: 1.11.1
   resolution: "@actions/core@npm:1.11.1"
   dependencies:
@@ -15,7 +15,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.0.4, @actions/exec@npm:^1.1.1":
+"@actions/exec@npm:^1.1.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
@@ -502,6 +502,16 @@ __metadata:
     "@eslint/core": "npm:^1.2.1"
     levn: "npm:^0.4.1"
   checksum: 10/8f923f4cdadadd215e0c2028e6a53101bb148a7780cdb4dc8cd69b0c77fc88496742e87e0605b12905ff715e2c7ad6cbd2d92c5653cdbf91cca1e229b5022c1f
+  languageName: node
+  linkType: hard
+
+"@game-ci/unity-engine-core@game-ci/unity-engine-core#main":
+  version: 0.1.0
+  resolution: "@game-ci/unity-engine-core@https://github.com/game-ci/unity-engine-core.git#commit=b99bdb875dbfedb101666575ae03866b536d65de"
+  dependencies:
+    "@actions/core": "npm:^1.10.0"
+    "@actions/exec": "npm:^1.1.1"
+  checksum: 10/b3f5f281b4b83c9fb89c578984ca707075b85fb5879ac5462ba41544bcaf4bdd145dfb91b3e26f613aa2485f1832971ee0b238aeac494e364a21fb5d3d6deb77
   languageName: node
   linkType: hard
 
@@ -3589,8 +3599,8 @@ __metadata:
   resolution: "unity-activate@workspace:."
   dependencies:
     "@actions/core": "npm:^1.2.6"
-    "@actions/exec": "npm:^1.0.4"
     "@actions/github": "npm:^6"
+    "@game-ci/unity-engine-core": "game-ci/unity-engine-core#main"
     "@octokit/core": "npm:^6"
     "@types/node": "npm:^17.0.8"
     "@typescript/native-preview": "npm:^7.0.0-dev.20260505.1"
