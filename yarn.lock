@@ -507,11 +507,11 @@ __metadata:
 
 "@game-ci/unity-engine-core@game-ci/unity-engine-core#main":
   version: 0.1.0
-  resolution: "@game-ci/unity-engine-core@https://github.com/game-ci/unity-engine-core.git#commit=b99bdb875dbfedb101666575ae03866b536d65de"
+  resolution: "@game-ci/unity-engine-core@https://github.com/game-ci/unity-engine-core.git#commit=c36a117611fdf9d38fc8f7975cca456ba6e66f36"
   dependencies:
     "@actions/core": "npm:^1.10.0"
     "@actions/exec": "npm:^1.1.1"
-  checksum: 10/b3f5f281b4b83c9fb89c578984ca707075b85fb5879ac5462ba41544bcaf4bdd145dfb91b3e26f613aa2485f1832971ee0b238aeac494e364a21fb5d3d6deb77
+  checksum: 10/ee8ff1e39bb9ace5d0b531f564f52ccfdba8bc91bedaaa11498d5d49c0e2dbe9819942fcaf15e519f9e53b0496b2ad78cd568a5e11d349b492700e3160d9a907
   languageName: node
   linkType: hard
 
