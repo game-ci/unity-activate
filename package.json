@@ -30,10 +30,10 @@
     ".github/workflows/*.@(yml|yaml)": "actionlint"
   },
   "dependencies": {
+    "@actions/cache": "^3.2.4",
     "@actions/core": "^1.2.6",
-    "@actions/github": "^6",
-    "@game-ci/unity-engine-core": "game-ci/unity-engine-core#main",
-    "@octokit/core": "^6"
+    "@actions/exec": "^1.1.1",
+    "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.8",
