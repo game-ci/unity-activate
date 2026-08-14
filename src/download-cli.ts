@@ -15,7 +15,8 @@ export function assetNameFor(platform: NodeJS.Platform, arch: string): string {
   };
 
   const target = targets[platform]?.[arch];
-  if (!target) throw new Error(`Unsupported platform/arch for the game-ci CLI: ${platform}/${arch}`);
+  if (!target)
+    throw new Error(`Unsupported platform/arch for the game-ci CLI: ${platform}/${arch}`);
 
   const extension = platform === 'win32' ? 'zip' : 'tar.gz';
 
@@ -66,7 +67,9 @@ export async function downloadCli(version: string): Promise<string> {
   core.info(`Downloading game-ci CLI (${version}) from ${url}`);
   const archivePath = await tc.downloadTool(url);
   const extractedDir =
-    process.platform === 'win32' ? await tc.extractZip(archivePath) : await tc.extractTar(archivePath);
+    process.platform === 'win32'
+      ? await tc.extractZip(archivePath)
+      : await tc.extractTar(archivePath);
 
   const binaryPath = path.join(extractedDir, binaryName);
   if (process.platform !== 'win32') {
@@ -108,7 +111,11 @@ async function restoreFromCache(version: string, binaryName: string): Promise<st
   }
 }
 
-async function saveToCache(version: string, binaryName: string, extractedDir: string): Promise<void> {
+async function saveToCache(
+  version: string,
+  binaryName: string,
+  extractedDir: string,
+): Promise<void> {
   if (!cache.isFeatureAvailable()) return;
 
   const cacheDir = cacheDirFor(version);

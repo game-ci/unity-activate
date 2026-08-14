@@ -102,7 +102,9 @@ async function downloadCli(version) {
         : `https://github.com/${CLI_REPO}/releases/latest/download/${asset}`;
     core.info(`Downloading game-ci CLI (${version}) from ${url}`);
     const archivePath = await tc.downloadTool(url);
-    const extractedDir = process.platform === 'win32' ? await tc.extractZip(archivePath) : await tc.extractTar(archivePath);
+    const extractedDir = process.platform === 'win32'
+        ? await tc.extractZip(archivePath)
+        : await tc.extractTar(archivePath);
     const binaryPath = path.join(extractedDir, binaryName);
     if (process.platform !== 'win32') {
         await fs.chmod(binaryPath, 0o755);
