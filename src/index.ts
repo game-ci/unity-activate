@@ -19,6 +19,14 @@ async function run() {
 
     const cliPath = await downloadCli(cliVersion);
 
+    // CodeQL flags this as js/command-line-injection since workspace
+    // derives from the runner environment. Verified false positive:
+    // ['activate', workspace] is an array of discrete argv entries, and
+    // @actions/exec's toolrunner.js passes it straight to
+    // child_process.spawn(fileName, args, options) - never a shell
+    // string, never shell-parsed. This comment does not suppress the
+    // alert (no inline-suppression mechanism exists in GitHub Code
+    // Scanning's default setup); dismiss via the Security tab/API instead.
     await exec.exec(cliPath, ['activate', workspace]);
   } catch (error: any) {
     core.setFailed(error.message);

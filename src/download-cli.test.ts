@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { assetNameFor, binaryNameFor } from './download-cli';
+import { describe, it, expect, vi } from 'vitest';
+import { assetNameFor, binaryNameFor, resolveLatestTag } from './download-cli';
 
 describe('assetNameFor', () => {
   it('maps linux x64 to a .tar.gz archive', () => {
@@ -36,5 +36,25 @@ describe('binaryNameFor', () => {
   it('is game-ci on every other platform', () => {
     expect(binaryNameFor('linux')).toBe('game-ci');
     expect(binaryNameFor('darwin')).toBe('game-ci');
+  });
+});
+
+describe('resolveLatestTag', () => {
+  it('resolves the tag_name from the GitHub releases/latest API', async () => {
+    const fetchFn = vi.fn(async (url: string) => {
+      expect(url).toBe('https://api.github.com/repos/game-ci/cli/releases/latest');
+      return { ok: true, json: async () => ({ tag_name: 'v1.2.3' }) } as Response;
+    });
+    expect(await resolveLatestTag(fetchFn)).toBe('v1.2.3');
+  });
+
+  it('throws with the status code when the API response is not ok', async () => {
+    const fetchFn = vi.fn(async () => ({ ok: false, status: 404 }) as Response);
+    await expect(resolveLatestTag(fetchFn)).rejects.toThrow(/404/);
+  });
+
+  it('throws when the response has no tag_name', async () => {
+    const fetchFn = vi.fn(async () => ({ ok: true, json: async () => ({}) }) as Response);
+    await expect(resolveLatestTag(fetchFn)).rejects.toThrow(/tag_name/);
   });
 });
