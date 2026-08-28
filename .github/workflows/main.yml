@@ -11,7 +11,7 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Read Node version from mise.toml
         id: node
@@ -78,7 +78,7 @@ jobs:
     steps:
       # Checkout repository (required to test local actions)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Activate Unity
       - name: Activate Unity
