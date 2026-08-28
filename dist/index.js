@@ -40,6 +40,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.validateCliVersion = validateCliVersion;
 exports.assetNameFor = assetNameFor;
 exports.binaryNameFor = binaryNameFor;
 exports.downloadCli = downloadCli;
@@ -51,6 +52,20 @@ const cache = __importStar(__nccwpck_require__(27799));
 const core = __importStar(__nccwpck_require__(42186));
 const tc = __importStar(__nccwpck_require__(27784));
 const CLI_REPO = 'game-ci/cli';
+/**
+ * A release tag is a plain identifier (e.g. "v0.1.0") - no path separators,
+ * dot-segments, or anything else that could escape the temp cache
+ * directory this version is used to build (cacheDirFor) or select an
+ * unintended GitHub path in the download URL. `cliVersion` is a
+ * user-supplied action input, so this validates it before it reaches
+ * either.
+ */
+const PINNED_VERSION_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]*$/;
+function validateCliVersion(version) {
+    if (version !== 'latest' && !PINNED_VERSION_PATTERN.test(version)) {
+        throw new Error(`Invalid game-ci CLI version: "${version}"`);
+    }
+}
 function assetNameFor(platform, arch) {
     const targets = {
         linux: { x64: 'linux-x64', arm64: 'linux-arm64' },
@@ -91,13 +106,14 @@ function binaryNameFor(platform) {
  * @param version A release tag (e.g. "v0.1.0"), or "latest".
  */
 async function downloadCli(version) {
+    validateCliVersion(version);
     const asset = assetNameFor(process.platform, process.arch);
     const binaryName = binaryNameFor(process.platform);
     const resolvedVersion = version === 'latest' ? await resolveLatestTag() : version;
     const cached = await restoreFromCache(resolvedVersion, binaryName);
     if (cached)
         return cached;
-    const url = `https://github.com/${CLI_REPO}/releases/download/${resolvedVersion}/${asset}`;
+    const url = `https://github.com/${CLI_REPO}/releases/download/${encodeURIComponent(resolvedVersion)}/${asset}`;
     core.info(`Downloading game-ci CLI ${resolvedVersion} from ${url}`);
     const archivePath = await tc.downloadTool(url);
     const extractedDir = process.platform === 'win32'

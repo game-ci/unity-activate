@@ -7,6 +7,22 @@ import * as tc from '@actions/tool-cache';
 
 const CLI_REPO = 'game-ci/cli';
 
+/**
+ * A release tag is a plain identifier (e.g. "v0.1.0") - no path separators,
+ * dot-segments, or anything else that could escape the temp cache
+ * directory this version is used to build (cacheDirFor) or select an
+ * unintended GitHub path in the download URL. `cliVersion` is a
+ * user-supplied action input, so this validates it before it reaches
+ * either.
+ */
+const PINNED_VERSION_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._+-]*$/;
+
+export function validateCliVersion(version: string): void {
+  if (version !== 'latest' && !PINNED_VERSION_PATTERN.test(version)) {
+    throw new Error(`Invalid game-ci CLI version: "${version}"`);
+  }
+}
+
 export function assetNameFor(platform: NodeJS.Platform, arch: string): string {
   const targets: Partial<Record<NodeJS.Platform, Partial<Record<string, string>>>> = {
     linux: { x64: 'linux-x64', arm64: 'linux-arm64' },
@@ -52,6 +68,8 @@ export function binaryNameFor(platform: NodeJS.Platform): string {
  * @param version A release tag (e.g. "v0.1.0"), or "latest".
  */
 export async function downloadCli(version: string): Promise<string> {
+  validateCliVersion(version);
+
   const asset = assetNameFor(process.platform, process.arch);
   const binaryName = binaryNameFor(process.platform);
   const resolvedVersion = version === 'latest' ? await resolveLatestTag() : version;
@@ -59,7 +77,7 @@ export async function downloadCli(version: string): Promise<string> {
   const cached = await restoreFromCache(resolvedVersion, binaryName);
   if (cached) return cached;
 
-  const url = `https://github.com/${CLI_REPO}/releases/download/${resolvedVersion}/${asset}`;
+  const url = `https://github.com/${CLI_REPO}/releases/download/${encodeURIComponent(resolvedVersion)}/${asset}`;
 
   core.info(`Downloading game-ci CLI ${resolvedVersion} from ${url}`);
   const archivePath = await tc.downloadTool(url);

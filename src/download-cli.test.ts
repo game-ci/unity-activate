@@ -1,5 +1,32 @@
 import { describe, it, expect, vi } from 'vitest';
-import { assetNameFor, binaryNameFor, resolveLatestTag } from './download-cli';
+import { assetNameFor, binaryNameFor, resolveLatestTag, validateCliVersion } from './download-cli';
+
+describe('validateCliVersion', () => {
+  it('accepts "latest"', () => {
+    expect(() => validateCliVersion('latest')).not.toThrow();
+  });
+
+  it('accepts a plain release tag', () => {
+    expect(() => validateCliVersion('v0.1.0')).not.toThrow();
+  });
+
+  it('rejects a path-traversal attempt', () => {
+    expect(() => validateCliVersion('../../etc/passwd')).toThrow(/Invalid game-ci CLI version/);
+  });
+
+  it('rejects a value containing a path separator', () => {
+    expect(() => validateCliVersion('foo/bar')).toThrow(/Invalid game-ci CLI version/);
+    expect(() => validateCliVersion('foo\\bar')).toThrow(/Invalid game-ci CLI version/);
+  });
+
+  it('rejects an encoded path separator', () => {
+    expect(() => validateCliVersion('%2e%2e%2f')).toThrow(/Invalid game-ci CLI version/);
+  });
+
+  it('rejects an empty string', () => {
+    expect(() => validateCliVersion('')).toThrow(/Invalid game-ci CLI version/);
+  });
+});
 
 describe('assetNameFor', () => {
   it('maps linux x64 to a .tar.gz archive', () => {
