@@ -1,5 +1,63 @@
-import { describe, it, expect, vi } from 'vitest';
-import { assetNameFor, binaryNameFor, resolveLatestTag, validateCliVersion } from './download-cli';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  assetNameFor,
+  binaryNameFor,
+  downloadCli,
+  resolveLatestTag,
+  validateCliVersion,
+} from './download-cli';
+
+const cacheMock = vi.hoisted(() => ({
+  isFeatureAvailable: vi.fn(() => true),
+  restoreCache: vi.fn(),
+  saveCache: vi.fn(),
+}));
+vi.mock('@actions/cache', () => cacheMock);
+
+const toolCacheMock = vi.hoisted(() => ({
+  downloadTool: vi.fn(async () => '/tmp/archive'),
+  extractTar: vi.fn(async () => '/tmp/extracted'),
+  extractZip: vi.fn(async () => '/tmp/extracted'),
+}));
+vi.mock('@actions/tool-cache', () => toolCacheMock);
+
+vi.mock('node:fs/promises', () => ({
+  chmod: vi.fn(async () => {}),
+  mkdir: vi.fn(async () => {}),
+  cp: vi.fn(async () => {}),
+}));
+
+describe('downloadCli caching', () => {
+  beforeEach(() => {
+    cacheMock.isFeatureAvailable.mockReturnValue(true);
+    cacheMock.restoreCache.mockReset();
+    cacheMock.saveCache.mockReset();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, json: async () => ({ tag_name: 'v1.2.3' }) }) as Response),
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('never checks or writes the cache for "latest", even after resolving to a concrete tag', async () => {
+    await downloadCli('latest');
+
+    expect(cacheMock.restoreCache).not.toHaveBeenCalled();
+    expect(cacheMock.saveCache).not.toHaveBeenCalled();
+  });
+
+  it('checks and writes the cache for a pinned version', async () => {
+    cacheMock.restoreCache.mockResolvedValueOnce(undefined);
+
+    await downloadCli('v0.1.0');
+
+    expect(cacheMock.restoreCache).toHaveBeenCalledTimes(1);
+    expect(cacheMock.saveCache).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('validateCliVersion', () => {
   it('accepts "latest"', () => {

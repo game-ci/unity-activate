@@ -98,10 +98,9 @@ function binaryNameFor(platform) {
  * resolved release tag, so repeat jobs on ephemeral, GitHub-hosted
  * runners skip the download entirely - @actions/tool-cache alone only
  * survives for the life of one runner's disk, which GitHub-hosted
- * runners don't persist between jobs. "latest" is resolved to its
- * concrete tag first (via the GitHub Releases API) so it still hits the
- * cache without ever pinning a job to a stale version: a fresh release
- * resolves to a new tag, and the cache simply misses once for it.
+ * runners don't persist between jobs. This only applies to a pinned
+ * version, though: "latest" is never cached, even after resolving to a
+ * concrete tag - see the comment at the cache-restore call below for why.
  *
  * @param version A release tag (e.g. "v0.1.0"), or "latest".
  */
@@ -109,8 +108,17 @@ async function downloadCli(version) {
     validateCliVersion(version);
     const asset = assetNameFor(process.platform, process.arch);
     const binaryName = binaryNameFor(process.platform);
-    const resolvedVersion = version === 'latest' ? await resolveLatestTag() : version;
-    const cached = await restoreFromCache(resolvedVersion, binaryName);
+    const isLatest = version === 'latest';
+    const resolvedVersion = isLatest ? await resolveLatestTag() : version;
+    // Caching is keyed by the resolved tag, so a pinned version is safely
+    // cacheable across runs - but "latest" must never be, even though it
+    // resolves to a concrete tag by this point: a release's assets can be
+    // replaced in place under the same tag (re-uploaded, corrected, etc.),
+    // and "latest" exists specifically so a job always gets whatever is
+    // actually current. Caching it by resolved tag would silently serve a
+    // stale cached archive instead, defeating the whole point of asking for
+    // "latest".
+    const cached = isLatest ? null : await restoreFromCache(resolvedVersion, binaryName);
     if (cached)
         return cached;
     const url = `https://github.com/${CLI_REPO}/releases/download/${encodeURIComponent(resolvedVersion)}/${asset}`;
@@ -123,7 +131,9 @@ async function downloadCli(version) {
     if (process.platform !== 'win32') {
         await fs.chmod(binaryPath, 0o755);
     }
-    await saveToCache(resolvedVersion, binaryName, extractedDir);
+    if (!isLatest) {
+        await saveToCache(resolvedVersion, binaryName, extractedDir);
+    }
     return binaryPath;
 }
 /** Resolves "latest" to its concrete release tag so it can be cached like any other version. */
