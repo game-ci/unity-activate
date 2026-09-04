@@ -1,0 +1,23 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+ignore:
+  SNYK-JS-ACTIONSGLOB-11484208:
+    - '*':
+        reason: >-
+          ReDoS in @actions/glob's globEscape (CVE-2025-5890). Snyk lists every
+          published version as affected - the upstream fix is on master but has
+          not been released - so there is no version of @actions/glob to upgrade
+          to. It reaches this action only as a transitive dependency of
+          @actions/cache, which we use to cache the game-ci CLI download.
+
+          Not reachable with attacker-controlled input here: the only paths
+          handed to @actions/cache are built by cacheDirFor() in
+          src/download-cli.ts as os.tmpdir()/game-ci-cli-cache/<version>, and
+          <version> is validated against PINNED_VERSION_PATTERN before it is
+          used. No user-supplied glob pattern reaches globEscape.
+
+          Revisit when @actions/glob publishes a release containing the fix,
+          then drop this entry and bump the dependency.
+        expires: 2027-03-04T00:00:00.000Z
+        created: 2026-09-04T00:00:00.000Z
+patch: {}

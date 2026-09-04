@@ -5,7 +5,17 @@ inputs:
   unityVersion:
     required: false
     default: '2019.2.11f1'
-    description: 'Version of unity to use for building the project.'
+    description: >-
+      Unused: kept for backward compatibility with existing workflows. The
+      underlying game-ci CLI detects the Unity version from the checked-out
+      project itself (ProjectSettings/ProjectVersion.txt).
+  cliVersion:
+    required: false
+    default: 'latest'
+    description: >-
+      Release tag of the game-ci/cli binary to install and run (e.g.
+      "v0.1.0"). Defaults to the latest release; pin this for reproducible
+      builds.
 outputs: {}
 branding:
   icon: 'box'

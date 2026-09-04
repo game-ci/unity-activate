@@ -80,6 +80,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # The thin wrapper shells out to game-ci/cli, which detects the engine
+      # (and Unity version) from ProjectSettings/ProjectVersion.txt in the
+      # checked-out workspace - unlike the old self-contained action, it's
+      # no longer enough for this job to just check out unity-activate's own
+      # repo with no Unity project in it ("Engine not detected from
+      # projectPath"). Write a minimal fixture matching the matrix version.
+      - name: Write a minimal Unity project fixture
+        run: |
+          mkdir -p ProjectSettings
+          echo "m_EditorVersion: ${{ matrix.unityVersion }}" > ProjectSettings/ProjectVersion.txt
+
       # Activate Unity
       - name: Activate Unity
         uses: ./
