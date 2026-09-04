@@ -30,7 +30,7 @@
     ".github/workflows/*.@(yml|yaml)": "actionlint"
   },
   "dependencies": {
-    "@actions/cache": "^4.0.0",
+    "@actions/cache": "^5.0.0",
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.1.1",
     "@actions/tool-cache": "^2.0.1"
