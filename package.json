@@ -31,9 +31,9 @@
   },
   "dependencies": {
     "@actions/cache": "^5.0.0",
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^2.0.0",
     "@actions/exec": "^1.1.1",
-    "@actions/tool-cache": "^2.0.1"
+    "@actions/tool-cache": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.8",
