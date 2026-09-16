@@ -57,6 +57,25 @@ describe('downloadCli caching', () => {
     expect(cacheMock.restoreCache).toHaveBeenCalledTimes(1);
     expect(cacheMock.saveCache).toHaveBeenCalledTimes(1);
   });
+
+  // downloadCli is the only caller of resolveLatestTag in production code,
+  // so this is what actually exercises the wiring index.ts depends on - the
+  // resolveLatestTag-level tests above only prove the function accepts the
+  // parameter, not that anything passes it one.
+  it('forwards its githubToken parameter to resolveLatestTag when resolving "latest"', async () => {
+    const fetchFn = vi.fn(
+      async () => ({ ok: true, json: async () => ({ tag_name: 'v1.2.3' }) }) as Response,
+    );
+    vi.stubGlobal('fetch', fetchFn);
+
+    await downloadCli('latest', 'gha-token-from-input');
+
+    const [, init] = fetchFn.mock.calls[0] as [
+      string,
+      RequestInit & { headers: Record<string, string> },
+    ];
+    expect(init.headers.Authorization).toBe('Bearer gha-token-from-input');
+  });
 });
 
 describe('validateCliVersion', () => {
@@ -131,6 +150,72 @@ describe('resolveLatestTag', () => {
       return { ok: true, json: async () => ({ tag_name: 'v1.2.3' }) } as Response;
     });
     expect(await resolveLatestTag(fetchFn)).toBe('v1.2.3');
+  });
+
+  it('sends no Authorization header when neither a githubToken nor GITHUB_TOKEN/GH_TOKEN are set', async () => {
+    const originalGithub = process.env.GITHUB_TOKEN;
+    const originalGh = process.env.GH_TOKEN;
+    delete process.env.GITHUB_TOKEN;
+    delete process.env.GH_TOKEN;
+
+    const fetchFn = vi.fn(
+      async () => ({ ok: true, json: async () => ({ tag_name: 'v1.2.3' }) }) as Response,
+    );
+
+    try {
+      await resolveLatestTag(fetchFn);
+      const [, init] = vi.mocked(fetchFn).mock.calls[0] as [
+        string,
+        RequestInit & { headers: Record<string, string> },
+      ];
+      expect(init.headers.Authorization).toBeUndefined();
+    } finally {
+      if (originalGithub !== undefined) process.env.GITHUB_TOKEN = originalGithub;
+      if (originalGh !== undefined) process.env.GH_TOKEN = originalGh;
+    }
+  });
+
+  // The githubToken parameter is the action's own `githubToken` input, which
+  // defaults to `${{ github.token }}` - populated by GitHub Actions on every
+  // run with no consumer action needed. process.env.GITHUB_TOKEN, by
+  // contrast, is NOT auto-injected into a JS action's environment - a
+  // calling workflow has to set it explicitly, which essentially none did.
+  // Confirmed live via game-ci/unity-test-runner#328: a consumer's
+  // six-version matrix failed simultaneously with "GitHub API returned 403"
+  // despite every job having a real, usable token the whole time.
+  it('sends an Authorization header from the githubToken parameter even when no env var is set', async () => {
+    const fetchFn = vi.fn(
+      async () => ({ ok: true, json: async () => ({ tag_name: 'v1.2.3' }) }) as Response,
+    );
+
+    await resolveLatestTag(fetchFn, 'gha-token-from-input');
+
+    const [, init] = vi.mocked(fetchFn).mock.calls[0] as [
+      string,
+      RequestInit & { headers: Record<string, string> },
+    ];
+    expect(init.headers.Authorization).toBe('Bearer gha-token-from-input');
+  });
+
+  it('falls back to GITHUB_TOKEN when no githubToken parameter is passed', async () => {
+    const original = process.env.GITHUB_TOKEN;
+    process.env.GITHUB_TOKEN = 'test-token-123';
+
+    const fetchFn = vi.fn(
+      async () => ({ ok: true, json: async () => ({ tag_name: 'v1.2.3' }) }) as Response,
+    );
+
+    try {
+      await resolveLatestTag(fetchFn);
+      const [, init] = vi.mocked(fetchFn).mock.calls[0] as [
+        string,
+        RequestInit & { headers: Record<string, string> },
+      ];
+      expect(init.headers.Authorization).toBe('Bearer test-token-123');
+    } finally {
+      if (original === undefined) delete process.env.GITHUB_TOKEN;
+      else process.env.GITHUB_TOKEN = original;
+    }
   });
 
   it('throws with the status code when the API response is not ok', async () => {
