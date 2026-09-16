@@ -16,8 +16,12 @@ async function run() {
   try {
     const cliVersion = core.getInput('cliVersion') || 'latest';
     const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
+    // Defaults to ${{ github.token }}, always populated by Actions - see
+    // download-cli.ts's resolveLatestTag for why this has to be threaded
+    // through rather than left to a GITHUB_TOKEN env var.
+    const githubToken = core.getInput('githubToken') || '';
 
-    const cliPath = await downloadCli(cliVersion);
+    const cliPath = await downloadCli(cliVersion, githubToken);
 
     // CodeQL flags this as js/command-line-injection since workspace
     // derives from the runner environment. Verified false positive:
