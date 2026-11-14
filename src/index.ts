@@ -32,8 +32,8 @@ async function run() {
     // alert (no inline-suppression mechanism exists in GitHub Code
     // Scanning's default setup); dismiss via the Security tab/API instead.
     await exec.exec(cliPath, ['activate', workspace]);
-  } catch (error: any) {
-    core.setFailed(error.message);
+  } catch (error) {
+    core.setFailed(error instanceof Error ? error.message : String(error));
   }
 }
 

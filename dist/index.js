@@ -197,7 +197,7 @@ async function restoreFromCache(version, binaryName) {
         return binaryPath;
     }
     catch (error) {
-        core.warning(`Failed to restore game-ci CLI from cache: ${error.message}`);
+        core.warning(`Failed to restore game-ci CLI from cache: ${error instanceof Error ? error.message : String(error)}`);
         return null;
     }
 }
@@ -213,7 +213,7 @@ async function saveToCache(version, binaryName, extractedDir) {
     catch (error) {
         // A cache miss on save (e.g. another concurrent job already saved this
         // key) isn't fatal - the download itself already succeeded.
-        core.warning(`Failed to save game-ci CLI to cache: ${error.message}`);
+        core.warning(`Failed to save game-ci CLI to cache: ${error instanceof Error ? error.message : String(error)}`);
     }
 }
 
@@ -292,7 +292,7 @@ async function run() {
         await exec.exec(cliPath, ['activate', workspace]);
     }
     catch (error) {
-        core.setFailed(error.message);
+        core.setFailed(error instanceof Error ? error.message : String(error));
     }
 }
 run();
